@@ -1,0 +1,8 @@
+{
+    "require": {
+        "stripe/stripe-php": "^7.75"
+    },
+    "scripts": {
+      "start": "cd public && php -S localhost:4242"
+    }
+}
