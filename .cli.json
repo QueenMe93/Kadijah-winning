@@ -1,0 +1,21 @@
+{
+  "name": "accept-a-payment",
+  "configureDotEnv": true,
+  "integrations": [
+    {
+      "name": "custom-payment-flow",
+      "clients": ["vanillajs", "react-cra", "android", "ios"],
+      "servers": [
+        "ruby",
+        "node",
+        "python",
+        "php",
+        "java",
+        "go",
+        "dotnet",
+        "node-typescript",
+        "php-slim"
+      ]
+    }
+  ]
+}
