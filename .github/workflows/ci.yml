@@ -1,0 +1,49 @@
+name: CI for stripe-samples/accept-a-payment
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
+        with:
+          repository: 'stripe-samples/sample-ci'
+          path: 'sample-ci'
+
+      - name: Setup dependencies
+        run: |
+          source sample-ci/helpers.sh
+          setup_dependencies
+
+      - name: Run tests
+        run: |
+          source sample-ci/helpers.sh
+
+          install_dummy_tests
+          install_docker_compose_settings
+          export STRIPE_WEBHOOK_SECRET=$(retrieve_webhook_secret)
+
+          for lang in $(cat .cli.json | server_langs_for_integration custom-payment-flow)
+          do
+            [ "$lang" = "php" ] && continue
+
+            configure_docker_compose_for_integration custom-payment-flow "$lang" ../../client/html
+
+            docker-compose up -d && wait_web_server
+            docker-compose exec -T runner bundle exec rspec spec/server_spec.rb
+          done
+        env:
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.TEST_STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.TEST_STRIPE_SECRET_KEY }}
+
+      - name: Collect debug information
+        if: ${{ failure() }}
+        run: |
+          cat docker-compose.yml
+          docker-compose ps -a
+          docker-compose logs web
+        env:
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.TEST_STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.TEST_STRIPE_SECRET_KEY }}
