@@ -1,0 +1,35 @@
+{
+  "name": "accept-a-payment",
+  "configureDotEnv": true,
+  "integrations": [
+    {
+      "name": "prebuilt-checkout-page",
+      "clients": ["html", "react-cra"],
+      "servers": [
+        "ruby",
+        "node",
+        "python",
+        "php",
+        "java",
+        "go",
+        "dotnet",
+        "php-slim"
+      ]
+    },
+    {
+      "name": "custom-payment-flow",
+      "clients": ["html", "react-cra", "ios", "android-kotlin", "ios-swiftui"],
+      "servers": [
+        "ruby",
+        "node",
+        "python",
+        "php",
+        "java",
+        "go",
+        "dotnet",
+        "node-typescript",
+        "php-slim"
+      ]
+    }
+  ]
+}
